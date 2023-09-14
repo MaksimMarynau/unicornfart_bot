@@ -25,6 +25,12 @@ async def dinner_ideas(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = food_features.get_dinner_from_url(start_url)
     await context.bot.send_message(chat_id=update.effective_chat.id, text=text)
 
+async def ideas_from_tag(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    tag_name = "".join(context.args) if len(context.args) < 1 else context.args[0] # support only 1 tag for now
+    tag_name = tag_name.lower()
+    text = food_features.get_tag_dishes(food_features.BASE_URL, tag_name)
+    await context.bot.send_message(chat_id=update.effective_chat.id, text=text)
+
 async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_message(chat_id=update.effective_chat.id, text=update.message.text)
 
@@ -55,6 +61,7 @@ if __name__ == '__main__':
     
     start_handler = CommandHandler('start', start)
     caps_handler = CommandHandler('caps', caps)
+    tag_handler = CommandHandler('ideas_from_tag', ideas_from_tag)
     dinner_ideas_handler = CommandHandler('dinner_ideas', dinner_ideas)
     echo_handler = MessageHandler(filters.TEXT & (~filters.COMMAND), echo)
     inline_caps_handler = InlineQueryHandler(inline_caps)
@@ -62,6 +69,7 @@ if __name__ == '__main__':
     
     application.add_handler(start_handler)
     application.add_handler(caps_handler)
+    application.add_handler(tag_handler)
     application.add_handler(dinner_ideas_handler)
     application.add_handler(echo_handler)
     application.add_handler(inline_caps_handler)
