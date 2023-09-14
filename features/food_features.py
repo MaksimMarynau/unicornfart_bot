@@ -26,7 +26,18 @@ def get_dinner_from_url(start_url, page_limit: int = 10) -> str:
 
     return text
 
+
+def get_all_tags(start_url) -> str:
+    all_tags = []
+    response = requests.get(start_url)
+    soup = BeautifulSoup(response.text, "html.parser")
+    for div in soup.find("div", class_="tags"):
+        tag = div.span.string.strip()
+        all_tags.append(tag)
+
+    return all_tags
+
+
 if __name__ == "__main__":
-    start_url = urljoin(BASE_URL, "/przepisy/dania-miesne/")
-    text = get_dinner_from_url(start_url)
+    text = get_all_tags(BASE_URL)
     print(text)
