@@ -1,72 +1,24 @@
-import requests
-from bs4 import BeautifulSoup
-import random
-from urllib.parse import urljoin
+
 from unidecode import unidecode
+from features import food_helpers
+from features import PURE_URL
 
 
-BASE_URL = "https://aniagotuje.pl/"
-
-
-def build_url(base_url, path):
-    return urljoin(base_url, path)
-
-
-def get_dinner_from_url(start_url, page_limit: int = 10) -> str:
-    page = 0
-    ideas = []
-    while page != page_limit:
-        url = build_url(start_url, str(page))
-        response = requests.get(url)
-        soup = BeautifulSoup(response.text, "html.parser")
-        for article in soup.find_all("article"):
-            h3_element = article.find('h3')
-            h3_name = h3_element.text
-            article_path = article.find('a')['href']
-            link = build_url(start_url, article_path)
-            ideas.append((h3_name, link))
-        page = page + 1
+def get_dinner_from_url(base_url) -> str:
+    ideas = food_helpers.get_ideas(base_url)
     text = "Wyniki wyszukiwania:\n"
-    for _ in range(5):
-        title, link = random.choice(ideas)
-        text += f"\n{title}: {link}"
-
+    text = food_helpers.build_text(text, ideas)
     return text
 
 
-def get_all_tags(start_url) -> str:
-    all_tags = []
-    response = requests.get(start_url)
-    soup = BeautifulSoup(response.text, "html.parser")
-    for div in soup.find("div", class_="tags"):
-        tag = div.span.string.strip()
-        all_tags.append(tag)
-
-    return all_tags
-
-
-def get_tag_dishes(start_url, tag_name: str, page_limit: int = 5) -> str:
+def get_tag_dishes(base_url, tag_name: str) -> str:
     text = "Wyniki wyszukiwania:\n"
-    page = 0
-    ideas = []
-    available_tags = get_all_tags(start_url)
+    available_tags = food_helpers.get_all_tags(base_url)
     if tag_name in available_tags:
-        while page != page_limit:
-            tag_name = unidecode(tag_name)
-            url = build_url(start_url, f"tag/{tag_name}/{page}")
-            response = requests.get(url)
-            soup = BeautifulSoup(response.text, "html.parser")
-            for article in soup.find_all("article"):
-                h3_element = article.find('h3')
-                h3_name = h3_element.text
-                article_path = article.find('a')['href']
-                link = build_url(BASE_URL, article_path)
-                ideas.append((h3_name, link))
-            page = page + 1
-    
-        for _ in range(5):
-            title, link = random.choice(ideas)
-            text += f"\n{title}: {link}"
+        tag_name = unidecode(tag_name)
+        url = food_helpers.build_url(base_url, f"tag/{tag_name}/")
+        ideas = food_helpers.get_ideas(url, page_limit=5)
+        text = food_helpers.build_text(text, ideas)
     else:
         text += f"Nie ma takiego tagu: <<< {tag_name} >>>"
 
@@ -74,5 +26,5 @@ def get_tag_dishes(start_url, tag_name: str, page_limit: int = 5) -> str:
 
 
 if __name__ == "__main__":
-    text = get_all_tags(BASE_URL)
+    text = food_helpers.get_all_tags(PURE_URL)
     print(text)

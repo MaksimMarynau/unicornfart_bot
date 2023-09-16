@@ -7,6 +7,7 @@ from features import food_features
 from urllib.parse import urljoin
 import os
 from dotenv import load_dotenv
+from features import PURE_URL
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -21,14 +22,14 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_message(chat_id=update.effective_chat.id, text="Witam człowieku!")
 
 async def dinner_ideas(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    start_url = urljoin(food_features.BASE_URL, "/przepisy/dania-miesne/")
+    start_url = urljoin(PURE_URL, "/przepisy/dania-miesne/")
     text = food_features.get_dinner_from_url(start_url)
     await context.bot.send_message(chat_id=update.effective_chat.id, text=text)
 
 async def ideas_from_tag(update: Update, context: ContextTypes.DEFAULT_TYPE):
     tag_name = "".join(context.args) if len(context.args) < 1 else context.args[0] # support only 1 tag for now
     tag_name = tag_name.lower()
-    text = food_features.get_tag_dishes(food_features.BASE_URL, tag_name)
+    text = food_features.get_tag_dishes(PURE_URL, tag_name)
     await context.bot.send_message(chat_id=update.effective_chat.id, text=text)
 
 async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE):
