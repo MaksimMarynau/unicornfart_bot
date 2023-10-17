@@ -2,14 +2,15 @@ import requests
 from bs4 import BeautifulSoup
 import random
 from urllib.parse import urljoin
-from features import PURE_URL
+from unicornfart_utils import configs
+from unidecode import unidecode
 
 
 def build_url(base_url, path):
     return urljoin(base_url, path)
 
 
-def get_ideas(base_url, page_limit: int = 10):
+def get_ideas(base_url, page_limit: int = 10) -> list:
     page = 0
     ideas = []
     while page != page_limit:
@@ -20,13 +21,13 @@ def get_ideas(base_url, page_limit: int = 10):
             h3_element = article.find('h3')
             h3_name = h3_element.text
             article_path = article.find('a')['href']
-            link = build_url(PURE_URL, article_path)
+            link = build_url(configs.FOOD_PURE_URL, article_path)
             ideas.append((h3_name, link))
         page = page + 1
     return ideas
 
 
-def build_text(text, ideas):
+def build_text(text, ideas) -> str:
     for _ in range(5):
         title, link = random.choice(ideas)
         text += f"\n{title}: {link}"
@@ -39,6 +40,11 @@ def get_all_tags(base_url) -> str:
     soup = BeautifulSoup(response.text, "html.parser")
     for div in soup.find("div", class_="tags"):
         tag = div.span.string.strip()
+        tag = normalize_tag(tag)
         all_tags.append(tag)
 
     return all_tags
+
+
+def normalize_tag(tag: str) -> str:
+    return unidecode(tag.replace(" ", "-"))

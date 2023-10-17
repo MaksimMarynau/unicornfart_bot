@@ -1,1 +1,0 @@
-PURE_URL = "https://aniagotuje.pl/"
