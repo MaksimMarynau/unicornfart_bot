@@ -10,12 +10,14 @@ def build_url(base_url, path):
     return urljoin(base_url, path)
 
 
-def get_ideas(base_url, page_limit: int = 10) -> list:
+def get_all_ideas(base_url, page_limit: int = 30) -> list:
     page = 0
     ideas = []
     while page != page_limit:
         modified_url = build_url(base_url, str(page))
         response = requests.get(modified_url)
+        if response.status_code == 404: # FIXME include other error codes(make better validation)
+            break
         soup = BeautifulSoup(response.text, "html.parser")
         for article in soup.find_all("article"):
             h3_element = article.find('h3')
@@ -28,7 +30,7 @@ def get_ideas(base_url, page_limit: int = 10) -> list:
 
 
 def build_text(text, ideas) -> str:
-    for _ in range(5):
+    for _ in range(2):
         title, link = random.choice(ideas)
         text += f"\n{title}: {link}"
     return text

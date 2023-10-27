@@ -2,8 +2,8 @@ from food import food_helpers
 from unicornfart_utils import configs
 
 
-def get_dinner_from_url(base_url) -> str:
-    ideas = food_helpers.get_ideas(base_url)
+def get_ideas_from_url(base_url) -> str:
+    ideas = food_helpers.get_all_ideas(base_url)
     text = "Wyniki wyszukiwania:\n"
     text = food_helpers.build_text(text, ideas)
     return text
@@ -14,7 +14,7 @@ def get_tag_dishes(base_url, tag_name: str) -> str:
     available_tags = food_helpers.get_all_tags(base_url)
     if tag_name in available_tags:
         url = food_helpers.build_url(base_url, f"tag/{tag_name}/")
-        ideas = food_helpers.get_ideas(url, page_limit=5)
+        ideas = food_helpers.get_all_ideas(url)
         text = food_helpers.build_text(text, ideas)
     else:
         text += f"Nie ma takiego tagu: <<< {tag_name} >>>"

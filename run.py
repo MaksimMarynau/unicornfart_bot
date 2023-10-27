@@ -25,13 +25,25 @@ class CommandManager:
             return
         await context.bot.send_message(chat_id=update.effective_chat.id, text="Uzyj /start, aby uruchomic bota.")
 
-    async def dinner_ideas(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def get_meat_dishes(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         if self.run_command:
             start_url = urljoin(configs.FOOD_PURE_URL, "/przepisy/dania-miesne/")
-            text = food_features.get_dinner_from_url(start_url)
+            text = food_features.get_ideas_from_url(start_url)
             await context.bot.send_message(chat_id=update.effective_chat.id, text=text)
 
-    async def ideas_from_tag(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def get_fish_dishes(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        if self.run_command:
+            start_url = urljoin(configs.FOOD_PURE_URL, "/przepisy/dania-rybne/")
+            text = food_features.get_ideas_from_url(start_url)
+            await context.bot.send_message(chat_id=update.effective_chat.id, text=text)
+
+    async def get_soups(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        if self.run_command:
+            start_url = urljoin(configs.FOOD_PURE_URL, "/przepisy/zupy/")
+            text = food_features.get_ideas_from_url(start_url)
+            await context.bot.send_message(chat_id=update.effective_chat.id, text=text)
+
+    async def get_tag_ideas(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         if self.run_command:
             tag_name = "".join(context.args) if len(context.args) < 1 else context.args[0] # support only 1 tag for now
             tag_name = tag_name.lower()
@@ -55,17 +67,21 @@ if __name__ == '__main__':
     
     start_handler = CommandHandler('start', cm.start)
     stop_handler = CommandHandler('stop', cm.stop)
-    tag_handler = CommandHandler('ideas_from_tag', cm.ideas_from_tag)
+    tag_ideas_handler = CommandHandler('tag_ideas', cm.get_tag_ideas)
     tag_info_handler = CommandHandler('available_tags', cm.available_tags)
-    dinner_ideas_handler = CommandHandler('dinner_ideas', cm.dinner_ideas)
+    meat_ideas_handler = CommandHandler('meat_dishes', cm.get_meat_dishes)
+    fish_ideas_handler = CommandHandler('fish_dishes', cm.get_fish_dishes)
+    soup_ideas_handler = CommandHandler('soups', cm.get_soups)
     unknown_handler = MessageHandler(filters.COMMAND, cm.unknown)
     
     application.add_handlers([
         start_handler, 
         stop_handler, 
-        tag_handler, 
+        tag_ideas_handler, 
         tag_info_handler,
-        dinner_ideas_handler, 
+        meat_ideas_handler,
+        fish_ideas_handler,
+        soup_ideas_handler, 
         unknown_handler,
     ])
 
