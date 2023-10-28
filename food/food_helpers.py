@@ -4,7 +4,7 @@ import random
 from urllib.parse import urljoin
 from unicornfart_utils import configs
 from unidecode import unidecode
-
+from collections import defaultdict
 
 def build_url(base_url, path):
     return urljoin(base_url, path)
@@ -36,7 +36,7 @@ def build_text(text, ideas) -> str:
     return text
 
 
-def get_all_tags(base_url) -> str:
+def get_all_tags(base_url) -> list:
     all_tags = []
     response = requests.get(base_url)
     soup = BeautifulSoup(response.text, "html.parser")
@@ -46,6 +46,24 @@ def get_all_tags(base_url) -> str:
         all_tags.append(tag)
 
     return all_tags
+
+
+def get_all_categories(base_url) -> dict:
+    categories_dict = defaultdict(lambda: None)
+    response = requests.get(base_url)
+    soup = BeautifulSoup(response.text, "html.parser")
+    left_nav = soup.find('nav', class_='leftNav')
+    if left_nav:
+        categories = left_nav.find_all('div', class_="cat-group")
+        for category in categories:
+            category_name = category.string     
+            categories_dict[category_name] = []
+            ul_elements = category.find_next('ul', id=True)
+            for ul_element in ul_elements:
+                li_link = ul_element.a['href']
+                link = build_url(base_url, li_link)
+                categories_dict[category_name].append(link)
+    return categories_dict
 
 
 def normalize_tag(tag: str) -> str:

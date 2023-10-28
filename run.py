@@ -54,6 +54,11 @@ class CommandManager:
         if self.run_command:
             text = food_features.get_available_tags(configs.FOOD_PURE_URL)
             await context.bot.send_message(chat_id=update.effective_chat.id, text=text)
+    
+    async def available_categories(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        if self.run_command:
+            text = food_features.get_available_categories(configs.FOOD_PURE_URL)
+            await context.bot.send_message(chat_id=update.effective_chat.id, text=text)
 
     async def unknown(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         if self.run_command:
@@ -69,6 +74,7 @@ if __name__ == '__main__':
     stop_handler = CommandHandler('stop', cm.stop)
     tag_ideas_handler = CommandHandler('tag_ideas', cm.get_tag_ideas)
     tag_info_handler = CommandHandler('available_tags', cm.available_tags)
+    category_info_handler = CommandHandler('available_categories', cm.available_categories)
     meat_ideas_handler = CommandHandler('meat_dishes', cm.get_meat_dishes)
     fish_ideas_handler = CommandHandler('fish_dishes', cm.get_fish_dishes)
     soup_ideas_handler = CommandHandler('soups', cm.get_soups)
@@ -79,6 +85,7 @@ if __name__ == '__main__':
         stop_handler, 
         tag_ideas_handler, 
         tag_info_handler,
+        category_info_handler,
         meat_ideas_handler,
         fish_ideas_handler,
         soup_ideas_handler, 

@@ -34,6 +34,14 @@ def get_available_tags(base_url, elements_per_line: int = 3) -> str:
     return text
 
 
+def get_available_categories(base_url) -> str:
+    text = "Wszystkie kategorie i linki:\n"
+    categories = food_helpers.get_all_categories(base_url)
+    for key, value in categories.items():
+        text += f"\n{key}\n" + "\n".join(value)
+    return text
+
+
 if __name__ == "__main__":
     text = food_helpers.get_all_tags(configs.FOOD_PURE_URL)
     print(text)
