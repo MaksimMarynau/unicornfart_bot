@@ -1,47 +1,26 @@
 from food import food_helpers
-from unicornfart_utils import configs
+import json
+from pathlib import Path
 
 
-def get_ideas_from_url(base_url) -> str:
-    ideas = food_helpers.get_all_ideas(base_url)
+def search_idea(base_url, query: str) -> str:
     text = "Wyniki wyszukiwania:\n"
-    text = food_helpers.build_text(text, ideas)
-    return text
-
-
-def get_tag_dishes(base_url, tag_name: str) -> str:
-    text = "Wyniki wyszukiwania:\n"
-    available_tags = food_helpers.get_all_tags(base_url)
-    if tag_name in available_tags:
-        url = food_helpers.build_url(base_url, f"tag/{tag_name}/")
-        ideas = food_helpers.get_all_ideas(url)
+    try:
+        ideas = food_helpers.get_search_ideas(base_url, query)
         text = food_helpers.build_text(text, ideas)
-    else:
-        text += f"Nie ma takiego tagu: <<< {tag_name} >>>"
-
+    except ValueError as err:
+        text += str(err)
     return text
 
 
-def get_available_tags(base_url, elements_per_line: int = 3) -> str:
-    text = "Wszystkie dostępne tagi:\n"
-    tags = food_helpers.get_all_tags(base_url)
-    for i, tag in enumerate(tags, start=1):
-        text += f"{i}.{tag}"
-        if i % elements_per_line == 0:
-            text += "\n"
-        else:
-            text += ", "
-    return text
-
-
-def get_available_categories(base_url) -> str:
-    text = "Wszystkie kategorie i linki:\n"
-    categories = food_helpers.get_all_categories(base_url)
-    for key, value in categories.items():
-        text += f"\n{key}\n" + "\n".join(value)
+def get_available_categories() -> str:
+    text = "Wszystkie dostępne kategorie:\n"
+    categories_file = Path(__file__).parent / "categories_data.json"
+    categories_data = json.loads(categories_file.read_text())
+    for key, value in categories_data.items():
+        text += f"\n{food_helpers.normalize_pl_chars(key)}\n" + "\n".join(value)
     return text
 
 
 if __name__ == "__main__":
-    text = food_helpers.get_all_tags(configs.FOOD_PURE_URL)
-    print(text)
+    pass

@@ -1,0 +1,43 @@
+{
+    "Kategorie": [
+        "https://aniagotuje.pl/przepisy/ciasta-i-torty",
+        "https://aniagotuje.pl/przepisy/ciasteczka",
+        "https://aniagotuje.pl/przepisy/desery",
+        "https://aniagotuje.pl/przepisy/babeczki-i-muffiny",
+        "https://aniagotuje.pl/przepisy/paczki-i-oponki",
+        "https://aniagotuje.pl/przepisy/serniki",
+        "https://aniagotuje.pl/przepisy/nalesniki-i-placki",
+        "https://aniagotuje.pl/przepisy/chleby-i-bulki",
+        "https://aniagotuje.pl/przepisy/dania-miesne",
+        "https://aniagotuje.pl/przepisy/dania-bez-miesa",
+        "https://aniagotuje.pl/przepisy/dania-rybne",
+        "https://aniagotuje.pl/przepisy/dania-na-slodko",
+        "https://aniagotuje.pl/przepisy/zupy",
+        "https://aniagotuje.pl/przepisy/salatki-i-surowki",
+        "https://aniagotuje.pl/przepisy/sosy-i-pasty",
+        "https://aniagotuje.pl/przepisy/przekaski",
+        "https://aniagotuje.pl/przepisy/przetwory",
+        "https://aniagotuje.pl/przepisy/napoje-i-koktajle",
+        "https://aniagotuje.pl/przepisy/drinki-i-nalewki",
+        "https://aniagotuje.pl/przepisy/lody-domowe"
+    ],
+    "Porady": ["https://aniagotuje.pl/przepisy/porady"],
+    "Pomysl na": [
+        "https://aniagotuje.pl/pomysl-na/sniadanie",
+        "https://aniagotuje.pl/pomysl-na/obiad",
+        "https://aniagotuje.pl/pomysl-na/kolacja"
+    ],
+    "Dieta": [
+        "https://aniagotuje.pl/dieta/bezglutenowa",
+        "https://aniagotuje.pl/dieta/weganska",
+        "https://aniagotuje.pl/dieta/wegetarianska"
+    ],
+    "Okazja": [
+        "https://aniagotuje.pl/okazja/halloween",
+        "https://aniagotuje.pl/okazja/sylwester",
+        "https://aniagotuje.pl/okazja/tlusty-czwartek",
+        "https://aniagotuje.pl/okazja/walentynki",
+        "https://aniagotuje.pl/okazja/wielkanoc",
+        "https://aniagotuje.pl/okazja/wigilia-i-swieta"
+    ]
+}
